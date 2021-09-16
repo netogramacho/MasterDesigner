@@ -70,12 +70,12 @@ function iniciarComponentes() {
             for (let i = 1; i <= $(this).val(); i++) {
                 htmlMoradores +=
                     '<div class="col-md-6">' +
-                    '<label for="nome_morador_' + i + '">Nome do morador ' + i + '</label>' +
+                    '<label class="nome_morador" for="nome_morador_' + i + '">Nome do morador ' + i + '</label>' +
                     '<input placeholder="Nome do morador ' + i + '" type="text" name="nome_morador_' + i + '" id="nome_morador_' + i + '">' +
                     '</div>' +
                     '<div class="col-md-6">' +
                     '<label for="idade_morador_' + i + '">Idade do morador ' + i + '</label>' +
-                    '<input placeholder="Idade do morador ' + i + '" type="tel" name="idade_morador_' + i + '" id="idade_morador_' + i + '">' +
+                    '<input class="idade_morador" placeholder="Idade do morador ' + i + '" type="tel" name="idade_morador_' + i + '" id="idade_morador_' + i + '">' +
                     '</div>';
             }
             htmlMoradores +=
@@ -177,17 +177,32 @@ function escolherFoto(id) {
 function cadastrar() {
     loaderInterno.show();
 
+
     if (!validarCampos()) {
-        swal("Erro!", "Preencha corrtamente os campos em vermelho!", "error");
+        swal("Erro!", "Preencha corrtamente os campos em vermelho!", "warning");
+        loaderInterno.hide();
+        return false;
+    }
+
+    if (!validarNomeMoradores()) {
+        swal("Erro!", "Preencha corrtamente o nome de todos os moradores!", "warning");
+        loaderInterno.hide();
+        return false;
+    }
+
+
+    if (!validarIdadeMoradores()) {
+        swal("Erro!", "Preencha corrtamente a idade de todos os moradores!", "warning");
         loaderInterno.hide();
         return false;
     }
 
     if (!validarUploads()) {
-        swal("Erro!", "Você precisa fazer upload de todas as 4 fotos!", "error");
+        swal("Erro!", "Você precisa fazer upload de todas as 5 fotos!", "warning");
         loaderInterno.hide();
         return false;
     }
+
 
     var formData = new FormData();
     formData.append("img_familia", $('#img_familia')[0].files[0]);
@@ -276,6 +291,31 @@ function cadastrar() {
             confirmButtonText: 'OK!',
         });
     });
+}
+
+
+function validarIdadeMoradores() {
+    let validar = true;
+
+    $('.idade_morador').each(function(i) {
+        if (this.value == '') {
+            validar = false;
+        }
+    });
+
+    return validar;
+}
+
+function validarNomeMoradores() {
+    let validar = true;
+
+    $('.nome_morador').each(function(i) {
+        if (this.value == '') {
+            validar = false;
+        }
+    });
+
+    return validar;
 }
 
 function validarUploads() {
